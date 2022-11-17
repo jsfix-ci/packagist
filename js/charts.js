@@ -44,16 +44,18 @@ import '../css/charts.css';
 
     function initPackagistChart(svg, labels, series, withDatePicker, type) {
         type = type || 'line';
-        var format = d3.time.format("%Y-%m-%d");
+        var format = d3.timeFormat("%Y-%m-%d");
         if (labels[0].match(/^\d+-\d+$/)) {
-            format = d3.time.format("%Y-%m");
+            format = d3.timeFormat("%Y-%m");
         }
 
         var chartData = [];
         series.map(function (serie, index) {
             var points = [];
             labels.map(function (label, index) {
-                points.push({x: format.parse(label), y: parseInt(serie.values[index]) || 0});
+                points.push({x: /* TODO: JSFIX could not patch the breaking change:
+                The format.parse method has been removed in favor of separate d3.timeParse, d3.utcParse and d3.isoParse parser constructors. */
+                format.parse(label), y: parseInt(serie.values[index]) || 0});
             })
             chartData.push({
                 values: points,
